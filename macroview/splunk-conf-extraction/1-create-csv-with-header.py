@@ -1,5 +1,6 @@
 import configparser
 import csv
+import sys
 
 
 def removeDuplicates(duplicate):
@@ -12,7 +13,7 @@ def removeDuplicates(duplicate):
 
 # 1. Read all headers & values and save into an array (COMPLETED)
 config = configparser.RawConfigParser()
-conf = config.read("single-section.conf")
+conf = config.read("searchLocalsavedsearches.conf")
 
 # Save all properties from all sections
 searches = []
@@ -48,3 +49,7 @@ uniqueHeaders.insert(0, "section.name")
 with open('result.csv', 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=uniqueHeaders)
     writer.writeheader()
+
+# print(uniqueHeaders)
+
+sys.exit(uniqueHeaders)
