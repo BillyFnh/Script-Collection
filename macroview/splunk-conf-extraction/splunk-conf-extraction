@@ -33,7 +33,7 @@
 # echo "Current Directory: `pwd`"
 # echo "**********Creating CSV with headers from master.conf**********"
 # python3 ./1-create-csv-with-header.py
-uniqueHeaders=$(python3 ./1-create-csv-with-header.py 2>&1)
+python3 ./1-create-csv-with-header.py
 # python3 ./1-create-csv-with-header.py
 
 # echo "**********result.csv created: /root/project/bashscript-collection/macroview/splunk-conf-extraction/result.csv**********"
@@ -81,7 +81,7 @@ echo `pwd`
 i=1
 for file in *.conf ;do
     echo "Processing: section-$i.conf"
-    python3 ../2-write-section-to-csv.py section-$i.conf $uniqueHeaders
+    python3 ../2-write-section-to-csv.py section-$i.conf
 
     i=$((i+1))
 done
