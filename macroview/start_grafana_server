@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo "starting grafana-server..."
+cd /root/grafana/src/github.com/grafana/grafana
+pwd
+./bin/linux-amd64/grafana-server
+

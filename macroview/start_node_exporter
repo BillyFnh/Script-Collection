@@ -1,0 +1,6 @@
+#!/bin/bash
+
+echo "starting up node_exporter..."
+cd /root/prometheuspackage/node_exporter/node_exporter-0.18.1.linux-amd64
+pwd
+./node_exporter
