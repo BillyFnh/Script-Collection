@@ -1,0 +1,80 @@
+#!/bin/bash
+
+# Program Overview
+# 1. collect all conf files and concatenate into one conf file (master.conf)
+# 2. get all unique headers from master.conf and create CSV file with appropriate headers (result.csv)
+# 3. create a master-section-collection folder, write all sections to into an independent file
+# 4. loop through all .conf files in master-section-collection folder, and write one row per .conf into result.csv
+
+
+
+# 1. collect all conf files and concatenate into one conf file (master.conf)
+
+# cd /opt/splunk/etc/apps
+# echo "Current Directory: `pwd`"
+# echo "**********Searching for all savedsearches.conf**********"
+
+# IFS=' ' read -r -a  targets <<< `find . -name "savedsearches.conf"`
+# echo "Number of savedsearches.conf found: ${#targets[@]}"
+# echo "The directories are as follow:"
+# touch master.conf
+# for (( i = 0 ; i < ${#targets[@]} ; i++));do
+#     echo "    ${targets[i]}"
+
+#     # write master.conf
+#     cat "${targets[i]}" >> /root/project/bashscript-collection/macroview/splunk-conf-extraction/master.conf
+# done
+#     echo ""**********master.conf created: /root/project/bashscript-collection/macroview/splunk-conf-extraction/master.conf"**********"
+
+
+# 2. get all unique headers from master.conf and create CSV file with appropriate headers (result.csv)
+
+cd /root/project/bashscript-collection/macroview/splunk-conf-extraction/
+# echo "Current Directory: `pwd`"
+# echo "**********Creating CSV with headers from master.conf**********"
+# python3.6 ./1-create-csv-with-header.py
+# echo "**********result.csv created: /root/project/bashscript-collection/macroview/splunk-conf-extraction/result.csv**********"
+
+# 3. create a master-section-collection folder, write all sections to into an independent file
+
+if [[ ! -e master-section-collection ]];then
+    mkdir master-section-collection
+fi
+
+fileID=1
+while read line;do
+    if [[ $line =~ ^\[.*\s\] ]];then
+        echo $line
+        # touch ./master-section-collection/$fileID
+        # echo $line >> ./master-section-collection/$fileID
+        # fileID=$((fileID+1))
+    else
+        echo $line | grep -v -P "^\[.*\s\]"
+        # sleep 5
+        # echo $line >> ./master-section-collection/$fileID
+    fi
+done < master.conf
+
+# testHeader="[abv-wwef"
+# echo "$testHeader"
+
+# if [[ $testHeader =~ ^\[.*\] ]];then
+#     echo "true"
+# else
+#     echo "false"
+# fi
+
+# requirements:
+# - name file with number section_1, section_2, ..., section_999
+# - include [<section_name>]
+
+
+# 4. loop through all .conf files in master-section-collection folder, and write one row per .conf into result.csv
+
+
+
+
+
+
+# cd /root/project/bashscript-collection/macroview/splunk-conf-extraction
+# python3.6 splunk-conf-extraction.py
