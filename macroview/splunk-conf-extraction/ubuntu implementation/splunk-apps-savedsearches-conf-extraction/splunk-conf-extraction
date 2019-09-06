@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# Program Overview
+# 1. Collect all conf files and concatenate into one conf file (master.conf)
+# 2. Get all unique headers from master.conf and create CSV file with appropriate headers (result.csv)
+# 3. Create a master-section-collection folder, write all sections to into an independent file
+# 4. Loop through all .conf files in master-section-collection folder, and write one row per .conf into result.csv
+
+
+# configure name of master.conf
+master="master.conf"
+
+# clean up previous runtime files
+rm -f $master
+rm -f master-raw.conf
+rm -f master-preclean.conf
+rm -rf master-section-collection
+
+# 1. collect all conf files and concatenate into one conf file (master.conf)
+
+cd /opt/splunk/etc/apps
+# echo "Current Directory: `pwd`"
+# echo "**********Searching for all savedsearches.conf**********"
+
+IFS=' ' read -r -a  targets <<< `echo $(find . -name "savedsearches.conf")`
+echo "Number of savedsearches.conf found: ${#targets[@]}"
+# echo "The directories are as follow:"
+touch $master
+for (( i = 0 ; i < ${#targets[@]} ; i++));do
+    # echo "    ${targets[i]}"
+
+# prep master.conf for configparser
+#   - line concatenation should be remoed and join into one line (no \ at end of line)
+
+    # write master.conf
+
+    cat "${targets[i]}" >> /root/splunk-apps-savedsearches-conf-extraction/master.conf
+done
+
+
+cd /root/splunk-apps-savedsearches-conf-extraction/
+# split master-raw.conf into smaller .conf files (5000 line per file)
+
+# split -l 3000 -d -a 1 /root/splunk-apps-savedsearches-conf-extraction/master-raw.conf
+
+    # remove backslashes and concat master-raw back togethre
+    # sed ':a; N; $!ba; s/\\\n//g; s/\\$//' "x0" >> master.conf
+    # sed ':a; N; $!ba; s/\\\n//g; s/.\\$//' "x1" >> master.conf
+    # sed ':a; N; $!ba; s/\\\n//g; s/.\\$//' "x2" >> master.conf
+    # sed ':a; N; $!ba; s/\\\n//g; s/.\\$//' "x3" >> master.conf
+    # sed ':a; N; $!ba; s/\\\n//g; s/.\\$//' "x4" >> master.conf
+    # sed ':a; N; $!ba; s/\\\n//g; s/.\\$//' "x5" >> master.conf
+
+    # sed ':x; /\\$/ { N; s/\\\n//; tx }' /root/splunk-apps-savedsearches-conf-extraction/master-raw.conf >> /root/splunk-apps-savedsearches-conf-extraction/$master
+    # perl -pe 's/\\\n//' /root/splunk-apps-savedsearches-conf-extraction/master-raw.conf >> /root/splunk-apps-savedsearches-conf-extraction/master-raw2.conf
+    # sed ':a; N; $!ba; s/\\\n//g; s/\\$//' /root/splunk-apps-savedsearches-conf-extraction/master-raw2.conf >> /root/splunk-apps-savedsearches-conf-extraction/$master
+    # sed ':a; N; $!ba; s/\\\n//g; s/\\$//' /root/splunk-apps-savedsearches-conf-extraction/master-raw2.conf >> /root/splunk-apps-savedsearches-conf-extraction/$master
+    # echo ""**********master.conf created: /root/splunk-apps-savedsearches-conf-extraction/$master"**********"
+
+# 2. get all unique headers from master.conf and create CSV file with appropriate headers (result.csv)
+
+# echo "Current Directory: `pwd`"
+# echo "**********Creating CSV with headers from $master**********"
+python3.6 ./1-create-csv-with-header.py $master
+# echo "**********result.csv created: /root/splunk-apps-savedsearches-conf-extraction/result.csv**********"
+
+# # 3. create a master-section-collection folder, write all sections to into an independent file
+
+# if [[ ! -e master-section-collection ]];then
+#     mkdir master-section-collection
+# fi
+
+# fileID=1
+# # # countMatches=0
+
+# while read line;do
+#     if [[ $line =~ ^\[.*\] ]];then
+#         # echo "********** DEBUG **********"
+#         # echo "$line" >> uniqueHeaders.txt
+#         # countMatches=$((countMatches+1))
+#         # echo "A: $line"
+#         # echo "********** END OF DEBUG **********"
+#         echo $line >> ./master-section-collection/section-$fileID.conf
+#         fileID=$((fileID+1))
+#     else
+#         # echo "********** DEBUG **********"
+#         # echo "B: $line"
+#         # echo "********** END OF DEBUG **********"
+#         if [[ $fileID != 1 ]];then
+#             echo $line >> ./master-section-collection/section-$((fileID-1)).conf
+#         else
+#             echo $line >> ./master-section-collection/section-$fileID.conf
+#         fi
+#     fi
+# done < $master
+
+# echo "********** DEBUG **********"
+# echo "Number of config files in master-section-collection: $((fileID-1))"
+# echo "Total number of uniqueHeaders: $countMatches"
+# echo "********** END OF DEBUG **********"
+
+
+# # 4. loop through all .conf files in master-section-collection folder, and write one row per .conf into result.csv
+
+# cd master-section-collection
+# echo `pwd`
+
+# i=1
+
+# for file in *.conf ;do
+#     echo "Processing: section-$i.conf"
+#     python3.6 ../2-write-section-to-csv.py section-$i.conf
+#     i=$((i+1))
+# done
+
+
+# # # clean up runtime files
+# # rm -f $master
+# # rm -f master-preclean.conf
+# # rm -rf master-section-collection
