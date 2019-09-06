@@ -10,67 +10,69 @@
 
 # 1. collect all conf files and concatenate into one conf file (master.conf)
 
-# cd /opt/splunk/etc/apps
-# echo "Current Directory: `pwd`"
-# echo "**********Searching for all savedsearches.conf**********"
+cd /opt/splunk/etc/apps
+echo "Current Directory: `pwd`"
+echo "**********Searching for all savedsearches.conf**********"
 
-# IFS=' ' read -r -a  targets <<< `find . -name "savedsearches.conf"`
-# echo "Number of savedsearches.conf found: ${#targets[@]}"
-# echo "The directories are as follow:"
-# touch master.conf
-# for (( i = 0 ; i < ${#targets[@]} ; i++));do
-#     echo "    ${targets[i]}"
+IFS=' ' read -r -a  targets <<< `find . -name "savedsearches.conf"`
+echo "Number of savedsearches.conf found: ${#targets[@]}"
+echo "The directories are as follow:"
+touch master.conf
+for (( i = 0 ; i < ${#targets[@]} ; i++));do
+    echo "    ${targets[i]}"
 
-#     # write master.conf
-#     cat "${targets[i]}" >> /root/project/bashscript-collection/macroview/splunk-conf-extraction/master.conf
-# done
-#     echo ""**********master.conf created: /root/project/bashscript-collection/macroview/splunk-conf-extraction/master.conf"**********"
+# prep master.conf for configparser
+#   - line concatenation should be remoed and join into one line (no \ at end of line)
+
+    # write master.conf
+    cat "${targets[i]}" >> /root/project/bashscript-collection/macroview/splunk-conf-extraction/master-preclean.conf
+done
+    sed ':a; N; $!ba; s/\\\n//g; s/\\$//' /root/project/bashscript-collection/macroview/splunk-conf-extraction/master-preclean.conf >> /root/project/bashscript-collection/macroview/splunk-conf-extraction/master.conf
+    echo ""**********master.conf created: /root/project/bashscript-collection/macroview/splunk-conf-extraction/master.conf"**********"
 
 
 # 2. get all unique headers from master.conf and create CSV file with appropriate headers (result.csv)
 
-# cd /root/project/bashscript-collection/macroview/splunk-conf-extraction/
-# echo "Current Directory: `pwd`"
-# echo "**********Creating CSV with headers from master.conf**********"
-# python3 ./1-create-csv-with-header.py
-python3 ./1-create-csv-with-header.py
-# python3 ./1-create-csv-with-header.py
+cd /root/project/bashscript-collection/macroview/splunk-conf-extraction/
+echo "Current Directory: `pwd`"
+echo "**********Creating CSV with headers from master.conf**********"
+python3.6 ./1-create-csv-with-header.py
+echo "**********result.csv created: /root/project/bashscript-collection/macroview/splunk-conf-extraction/result.csv**********"
 
-# echo "**********result.csv created: /root/project/bashscript-collection/macroview/splunk-conf-extraction/result.csv**********"
 
 # 3. create a master-section-collection folder, write all sections to into an independent file
 
-# if [[ ! -e master-section-collection ]];then
-#     mkdir master-section-collection
-# fi
+if [[ ! -e master-section-collection ]];then
+    mkdir master-section-collection
+fi
 
-# fileID=1
+fileID=1
 # # countMatches=0
 
-# while read line;do
-#     if [[ $line =~ ^\[.*\] ]];then
-#         # echo "********** DEBUG **********"
-#         # echo "$line" >> uniqueHeaders.txt
-#         # countMatches=$((countMatches+1))
-#         # echo "A: $line"
-#         # echo "********** END OF DEBUG **********"
-#         echo $line >> ./master-section-collection/section-$fileID.conf
-#         fileID=$((fileID+1))
-#     else
-#         # echo "********** DEBUG **********"
-#         # echo "B: $line"
-#         # echo "********** END OF DEBUG **********"
-#         if [[ $fileID != 1 ]];then
-#             echo $line >> ./master-section-collection/section-$((fileID-1)).conf
-#         else
-#             echo $line >> ./master-section-collection/section-$fileID.conf
-#         fi
-#     fi
-# done < searchLocalsavedsearches.conf
+while read line;do
+    if [[ $line =~ ^\[.*\] ]];then
+        # echo "********** DEBUG **********"
+        # echo "$line" >> uniqueHeaders.txt
+        # countMatches=$((countMatches+1))
+        # echo "A: $line"
+        # echo "********** END OF DEBUG **********"
+        echo $line >> ./master-section-collection/section-$fileID.conf
+        fileID=$((fileID+1))
+    else
+        # echo "********** DEBUG **********"
+        # echo "B: $line"
+        # echo "********** END OF DEBUG **********"
+        if [[ $fileID != 1 ]];then
+            echo $line >> ./master-section-collection/section-$((fileID-1)).conf
+        else
+            echo $line >> ./master-section-collection/section-$fileID.conf
+        fi
+    fi
+done < master.conf
 
-# echo "********** DEBUG **********"
-# echo "Total number of uniqueHeaders: $countMatches"
-# echo "********** END OF DEBUG **********"
+echo "********** DEBUG **********"
+echo "Total number of uniqueHeaders: $countMatches"
+echo "********** END OF DEBUG **********"
 
 
 # 4. loop through all .conf files in master-section-collection folder, and write one row per .conf into result.csv
@@ -79,13 +81,9 @@ cd master-section-collection
 echo `pwd`
 
 i=1
+
 for file in *.conf ;do
     echo "Processing: section-$i.conf"
-    python3 ../2-write-section-to-csv.py section-$i.conf
-
+    python3.6 ../2-write-section-to-csv.py section-$i.conf
     i=$((i+1))
 done
-
-
-# cd /root/project/bashscript-collection/macroview/splunk-conf-extraction
-# python3.6 splunk-conf-extraction.py

@@ -12,8 +12,8 @@ def removeDuplicates(duplicate):
 
 
 # 1. Read all headers & values and save into an array (COMPLETED)
-config = configparser.RawConfigParser()
-conf = config.read("searchLocalsavedsearches.conf")
+config = configparser.RawConfigParser(strict=False)
+conf = config.read("master.conf")
 
 # Save all properties from all sections
 searches = []
