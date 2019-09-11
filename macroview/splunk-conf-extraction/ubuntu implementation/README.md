@@ -1,3 +1,6 @@
+Status: Resolved issue below :)
+
+
 note to self
 
 I'm currently stuck on preparing thre file for configparser.
