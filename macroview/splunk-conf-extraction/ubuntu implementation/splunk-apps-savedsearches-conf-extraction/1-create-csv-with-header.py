@@ -11,53 +11,57 @@ def removeDuplicates(duplicate):
             final_list.append(num)
     return final_list
 
-# prep master-raw.conf 
-print(sys.argv[1])
-with open(sys.argv[1], 'r') as master:
-    content = master.read()
+# # prep master-raw.conf 
+# print("prepping master-raw.conf in 1-create-csv-with-header.py, target = ", sys.argv[1])
 
-cleanedContent = re.sub(r'\\$', '', content)
+# # with open(sys.argv[1], 'r') as master:
+# #     content = master.read()
+
+# # cleanedContent = re.sub(r'\\$', '', content)
+
+# with open(sys.argv[1]) as f:
+#     cleanedContent = " ".join(line.strip("\n") for line in f)
 # print(cleanedContent)
 
-with open('master-python.conf', 'w', newline='') as masterPython:
-    masterPython.write(cleanedContent)
+# with open('master-python.conf', 'w', newline='') as masterPython:
+#     masterPython.write(cleanedContent)
 
-# # 1. Read all headers & values and save into an array (COMPLETED)
-# config = configparser.RawConfigParser(strict=False)
-# conf = config.read("master-python.conf")
+# 1. Read all headers & values and save into an array (COMPLETED)
+config = configparser.RawConfigParser(strict=False)
+conf = config.read("master.conf")
 
-# # Save all properties from all sections
-# searches = []
-# headers = []
-# values = []
+# Save all properties from all sections
+searches = []
+headers = []
+values = []
 
-# for section in config.sections():
-#     searches.append(section)
-#     for property in config[section]:
-#         # print(property + " = " + config[section][property])
-#         headers.append(property)
-#         values.append(config[section][property])
+for section in config.sections():
+    searches.append(section)
+    for property in config[section]:
+        # print(property + " = " + config[section][property])
+        headers.append(property)
+        values.append(config[section][property])
 
-# # 2. Remove duplicates in the headers (COMPLETED)
-# uniqueHeaders = removeDuplicates(headers)
+# 2. Remove duplicates in the headers (COMPLETED)
+uniqueHeaders = removeDuplicates(headers)
 
-# # print("**********DEBUG**********")
-# # print("Number of sections extracted: ", len(searches))
-# # print(searches)
-# # print("There are a total of", len(headers), "headers extracted:")
-# # print(headers)
-# # print("Here are the respective values:")
-# # for key in range(len(headers)):
-# #     print(headers[key], ": ", values[key])
-# # print("There are a total of", len(uniqueHeaders), "uniqueHeaders extracted:")
-# # print(uniqueHeaders)
-# # print("**********End of DEBUG**********")
+# print("**********DEBUG**********")
+# print("Number of sections extracted: ", len(searches))
+# print(searches)
+# print("There are a total of", len(headers), "headers extracted:")
+# print(headers)
+# print("Here are the respective values:")
+# for key in range(len(headers)):
+#     print(headers[key], ": ", values[key])
+# print("There are a total of", len(uniqueHeaders), "uniqueHeaders extracted:")
+# print(uniqueHeaders)
+# print("**********End of DEBUG**********")
 
-# # Assign all unique header names as field names to csv
-# #   Add section name into fieldnames
-# uniqueHeaders.insert(0, "section.name")
+# Assign all unique header names as field names to csv
+#   Add section name into fieldnames
+uniqueHeaders.insert(0, "section.name")
 
-# # Create CSV file with appropriate headers
-# with open('result.csv', 'w', newline='') as csvfile:
-#     writer = csv.DictWriter(csvfile, fieldnames=uniqueHeaders)
-#     writer.writeheader()
+# Create CSV file with appropriate headers
+with open('result.csv', 'w', newline='') as csvfile:
+    writer = csv.DictWriter(csvfile, fieldnames=uniqueHeaders)
+    writer.writeheader()
