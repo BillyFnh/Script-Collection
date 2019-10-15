@@ -11,7 +11,7 @@ master="master.conf"
 splunkdir="/opt/splunk/etc/apps"
 workdir="/root/splunk-apps-savedsearches-conf-extraction"
 
-# clean up previous runtime files & prep for current runtime
+clean up previous runtime files & prep for current runtime
 rm -f $master
 rm -f master-raw.conf
 rm -f result.csv
@@ -24,6 +24,7 @@ mkdir master-section-collection
 
 
 # 1. collect all conf files and concatenate into one conf file ($master)
+echo "Begin collecting savedsearches.conf from $splunkdir"
 
 cd $splunkdir
 
@@ -83,14 +84,6 @@ done < $master
 
 cd master-section-collection
 
-# i=1
-
-# for file in *.conf ;do
-#     echo "Processing: section-$i.conf"
-#     python3.6 ../2-write-section-to-csv.py section-$i.conf
-#     i=$((i+1))
-# done
-
 IFS=' ' read -r -a sections <<< `echo $(ls)`
 echo "Number of sections extracted: ${#sections[@]}"
 for (( i = 0 ; i < ${#sections[@]} ; i++));do
@@ -104,9 +97,13 @@ echo "Number of savedsearches.conf found: ${#savedsearches[@]}"
 echo "Number of sections extracted: ${#sections[@]}"
 echo "result.csv created: $workdir/result.csv"
 
-# # clean up runtime files
-# rm -f $master
+# archive result 
+cd ..
+cp "result.csv" "./result-history/result_`date +%Y%m%d%H%M`.csv"
+
+# clean up runtime files
+rm -f $master
 rm -f master-raw.conf
-# rm -rf master-section-collection
-# rm -rf savedsearches-collection
+rm -rf master-section-collection/
+rm -rf savedsearches-collection/
 

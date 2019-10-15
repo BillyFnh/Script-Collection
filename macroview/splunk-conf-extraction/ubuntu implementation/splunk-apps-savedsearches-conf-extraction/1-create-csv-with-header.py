@@ -31,6 +31,10 @@ uniqueHeaders = removeDuplicates(headers)
 
 #   Add section name into fieldnames
 uniqueHeaders.insert(0, "section.name")
+uniqueHeaders.insert(0, "datamodel.with.duplicates")
+uniqueHeaders.insert(0, "datamodel.without.duplicates")
+uniqueHeaders.insert(0, "datamodel.with.duplicates.count")
+uniqueHeaders.insert(0, "datamodel.without.duplicates.count")
 # uniqueHeaders.insert(0, "splunk.app.name")
 
 # Create CSV file with appropriate headers
