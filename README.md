@@ -18,7 +18,7 @@ response = requests.get('http://172.31.38.73/api/v4/issues?assignee_id=2&state=o
 
 ### Script Execution
 
-`/root/project/bashscript-collection/macroview/export-gitlab-issue.py`
+`/root/project/bashscript-collection/export-gitlab-issue.py`
 
 ## JSON Filter (Splunk Add-On)
 
@@ -51,4 +51,4 @@ exportFolder = './export-20201112-cleaned/'
 
 ### Script Execution
 
-`/root/project/bashscript-collection/macroview/filter-json-splunk-add-on.py`
+`/root/project/bashscript-collection/filter-json-splunk-add-on.py`
