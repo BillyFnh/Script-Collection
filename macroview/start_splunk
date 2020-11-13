@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo "starting splunk enterprise"
-cd /opt/splunk/bin
-pwd
-./splunk start --accept-license

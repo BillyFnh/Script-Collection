@@ -1,6 +1,0 @@
-#!/bin/bash
-
-echo "scheduled task"
-
-echo "creating a new file /root/scheduled-task-object.txt"
-echo "this is written by a scheduled task" >> scheduled-task-object.txt
