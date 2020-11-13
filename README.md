@@ -1,5 +1,25 @@
 # Bash Script Collection
 
+## Export GitLab Issues To CSV
+
+### Purpose
+
+Generate To-Do list (CSV) by fetching GitLab incomplete issues.
+
+### Script configuration
+
+```python
+# set access token
+headers = {'PRIVATE-TOKEN': 'iCYg1N3PpiGxS12CCRBm'}
+
+# set GitLab endpoint & user ID
+response = requests.get('http://172.31.38.73/api/v4/issues?assignee_id=2&state=opened&per_page=100&page=1', headers=headers)
+```
+
+### Script Execution
+
+`/root/project/bashscript-collection/macroview/export-gitlab-issue.py`
+
 ## JSON Filter (Splunk Add-On)
 
 ### Purpose
@@ -31,4 +51,4 @@ exportFolder = './export-20201112-cleaned/'
 
 ### Script Execution
 
-```/root/project/bashscript-collection/macroview/filter-json-splunk-add-on.py```
+`/root/project/bashscript-collection/macroview/filter-json-splunk-add-on.py`
