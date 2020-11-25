@@ -3,14 +3,14 @@ import csv
 import sys
 
 headers = {'PRIVATE-TOKEN': 'iCYg1N3PpiGxS12CCRBm'}
-assignee_id = 2 # 
+assignee_id = 2
 all_available_csv_fieldnames = ["id", "iid", "project_id", "title", "description", "state", "created_at", "updated_at", "closed_at", "closed_by", "labels", "milestone", "assignees", "author", "assignee", "user_notes_count", "merge_requests_count", "upvotes", "downvotes", "due_date", "confidential", "discussion_locked", "web_url", "time_stats", "task_completion_status", "has_tasks", "_links", "references", "moved_to_id"]
 export_csv_fieldnames = ['id', 'project_id', 'project', 'title', 'description', 'created_at', 'updated_at', 'closed_at', 'due_date', 'web_url', 'author', 'assignee']
 response = requests.get('http://172.31.38.73/api/v4/issues?assignee_id=2&state=opened&per_page=100&page=1', headers=headers)
 issue_counter = 0
 issues = response.json()
 
-# Create new CSV  with appropriate fieldnames
+# Create new CSV with appropriate fieldnames
 with open('issues.csv', 'w', newline='') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=export_csv_fieldnames)
     writer.writeheader()

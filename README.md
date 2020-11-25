@@ -1,81 +1,31 @@
 # Script Collection
 
-## JSON Filter (Splunk Add-On)
+This project contains scripts useful to me:
 
-### Purpose
+## Kubernetes
 
-Filter duplicated entires in data exported via Splunk add-on database.
+### Cheatsheet - [Readme](./kubernetes/README.md)
 
-### Exporting Data From Splunk Add-On Database
+### Cleanup Stale Replica Sets - [Readme](./kubernetes/README.md) / [Script](./kubernetes/cleanup-stale-replica-set.sh)
 
-```bash
-# ssh into existing K8s Pod
-kubectl -n production splunk-database exec -it production-mongodb-0 /bin/bash
+## Docker
 
-# PV location
-cd /data/db
-
-# export data in JSON format
-mongoexport --db admin --collection apps --out Splunk_TA_bluecoat-proxysg.bson --query '{"web-scraped-app.name": "Splunk Add-on for Symantec Blue Coat ProxySG"}'
-```
-
-### Script Configuration
-
-```python
-# Folder that contain raw JSON files are
-targetFolder = './export-20201112/'
-
-# Folder that the script will output to
-exportFolder = './export-20201112-cleaned/'
-```
-
-### Script Execution
-
-`./filter-json-splunk-add-on.py`
-
-## Export GitLab Issues To CSV
-
-### Purpose
-
-Generate To-Do list (CSV) by fetching GitLab incomplete issues.
-
-### Script configuration
-
-```python
-# set access token
-headers = {'PRIVATE-TOKEN': 'iCYg1N3PpiGxS12CCRBm'}
-
-# set GitLab endpoint & user ID
-response = requests.get('http://172.31.38.73/api/v4/issues?assignee_id=2&state=opened&per_page=100&page=1', headers=headers)
-```
-
-### Script Execution
-
-`./export-gitlab-issue.py`
+### Cheatsheet - [Readme](./docker/README.md)
 
 ## GitLab
 
-### Daily Application Backup
+### Application Backup - [Readme](./gitlab/README.md) / [Script](./gitlab/backup-gitlab.sh)
 
-Perform daily backup of Dockerized GitLab (ominious installation) and SCP the backup files to a save location.
+### Assited Backup Restoration - [Readme](./gitlab/README.md) / [Script (Part 1)](./gitlab/restore-gitlab-backup-1.sh) / [Script (Part 2)](./gitlab/restore-gitlab-backup-2.sh)
 
-### Semi-Auto GitLab Backup Restoration
+### Restoration Validation - [Readme](./gitlab/README.md) / [Script](./gitlab/check-repo-response.sh)
 
-Restore GitLab from Backup, require manual input at interactive CLI.
+### Export Issues - [Readme](./gitlab/README.md) / [Script](./gitlab/export-gitlab-issue.py)
 
-#### Script Execution
+## Misc
 
-```bash
-# start script part 1
-./restore-gitlab-backup-1.sh
+### Cheatsheet - [Readme](./misc/README.md)
 
-# copy script generated from above script, manually confirm twice in interactive CLI
-docker exec -it gitlab-$backup_data_name gitlab-backup restore BACKUP=$backup_data_name
+### JSON filter - [Readme](./imsc/json-filter/README.md) / [Script](./imsc/json-filter/filter-json-splunk-add-on.py)
 
-# continue with restoration with scrit part 2
-./restore-gitlab-backup-1.sh
-```
-
-### Check Repository HTTP Response
-
-Validate GitLab repositories are restored properly and have content inside.
+### Normalize Timezone Notation (CSV) - [Readme](./misc/normalize-timezone-name/README.md) / [Script](.misc//normalize-timezone-name/normalize-timestamp.sh)

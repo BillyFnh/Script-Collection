@@ -3,11 +3,14 @@
 import os
 import json
 
-targetFolder = './export-20201112/'
-exportFolder = './export-20201112-cleaned/'
-filenameArr = os.listdir('./' + 'export-20201112')
+targetFolder = './export-20201116/'
+exportFolder = './export-20201116-cleaned/'
+filenameArr = os.listdir('./' + 'export-20201116')
+
+print(len(filenameArr), 'json file(s) found in', targetFolder)
 
 for filename in filenameArr:
+  print('processing', filename)
   filteredJson = []
   updateDateArr = []
 
