@@ -1,5 +1,4 @@
 #!/bin/bash
-# clean up stale Replica Sets on K8s cluster
 # Cron Schedule: 15 4 * * *
 
 # cleanup namespace: splunk-database & production-splunk-database
@@ -18,4 +17,4 @@ for (( i=0 ; i<${#rsNameDefacement[@]} ; i++ ));do
     echo $(kubectl delete replicaset.apps/${rsNameDefacement[i]} -n ${rsNameSpaceDefacement[i]})
 done
 
-curl -X POST -H 'Content-type: application/json' --data '{"text": "*Cleanup Stale Replica Sets*\n*Target Namespaces*:\t\t splunk-database\n\t\t\t\t\t\t\t\t\t\t\tproduction-splunk-database\n\t\t\t\t\t\t\t\t\t\t\tdefacement-detection\n\t\t\t\t\t\t\t\t\t\t\tproduction-defacement-detection\n"}' https://hooks.slack.com/services/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
+curl -X POST -H 'Content-type: application/json' --data '{"text": "*Cleanup Stale Replica Sets*\n*Target Namespaces*:\t\t splunk-database\n\t\t\t\t\t\t\t\t\t\t\tproduction-splunk-database\n\t\t\t\t\t\t\t\t\t\t\tdefacement-detection\n\t\t\t\t\t\t\t\t\t\t\tproduction-defacement-detection\n"}' https://hooks.slack.com/something

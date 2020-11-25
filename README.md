@@ -1,54 +1,31 @@
-# Bash Script Collection
+# Script Collection
 
-## Export GitLab Issues To CSV
+This project contains scripts useful to me:
 
-### Purpose
+## Kubernetes
 
-Generate To-Do list (CSV) by fetching GitLab incomplete issues.
+### Cheatsheet - [Readme](./kubernetes/README.md)
 
-### Script configuration
+### Cleanup Stale Replica Sets - [Readme](./kubernetes/README.md) / [Script](./kubernetes/cleanup-stale-replica-set.sh)
 
-```python
-# set access token
-headers = {'PRIVATE-TOKEN': 'iCYg1N3PpiGxS12CCRBm'}
+## Docker
 
-# set GitLab endpoint & user ID
-response = requests.get('http://172.31.38.73/api/v4/issues?assignee_id=2&state=opened&per_page=100&page=1', headers=headers)
-```
+### Cheatsheet - [Readme](./docker/README.md)
 
-### Script Execution
+## GitLab
 
-`/root/project/bashscript-collection/export-gitlab-issue.py`
+### Application Backup - [Readme](./gitlab/README.md) / [Script](./gitlab/backup-gitlab.sh)
 
-## JSON Filter (Splunk Add-On)
+### Assited Backup Restoration - [Readme](./gitlab/README.md) / [Script (Part 1)](./gitlab/restore-gitlab-backup-1.sh) / [Script (Part 2)](./gitlab/restore-gitlab-backup-2.sh)
 
-### Purpose
+### Restoration Validation - [Readme](./gitlab/README.md) / [Script](./gitlab/check-repo-response.sh)
 
-Filter duplicated entires in data exported via Splunk add-on database.
+### Export Issues - [Readme](./gitlab/README.md) / [Script](./gitlab/export-gitlab-issue.py)
 
-### Exporting Data From Splunk Add-On Database
+## Misc
 
-```bash
-# ssh into existing K8s Pod
-kubectl -n production splunk-database exec -it production-mongodb-0 /bin/bash
+### Cheatsheet - [Readme](./misc/README.md)
 
-# PV location
-cd /data/db
+### JSON filter - [Readme](./imsc/json-filter/README.md) / [Script](./imsc/json-filter/filter-json-splunk-add-on.py)
 
-# export data in JSON format
-mongoexport --db admin --collection apps --out Splunk_TA_bluecoat-proxysg.bson --query '{"web-scraped-app.name": "Splunk Add-on for Symantec Blue Coat ProxySG"}'
-```
-
-### Script Configuration
-
-```python
-# Folder that contain raw JSON files are
-targetFolder = './export-20201112/'
-
-# Folder that the script will output to
-exportFolder = './export-20201112-cleaned/'
-```
-
-### Script Execution
-
-`/root/project/bashscript-collection/filter-json-splunk-add-on.py`
+### Normalize Timezone Notation (CSV) - [Readme](./misc/normalize-timezone-name/README.md) / [Script](.misc//normalize-timezone-name/normalize-timestamp.sh)
